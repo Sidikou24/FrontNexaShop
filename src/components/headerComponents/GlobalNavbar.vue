@@ -54,13 +54,13 @@ header .navbar {
                     <a href="" class="navbar-brand fw-bold fs-2 col-lg-3 me-0 brand-lg">Nexa Shop</a>
                     <ul
                         class="navbar-nav col-lg-6 justify-content-lg-center align-items-sm-start align-items-lg-center flex-grow-1 gap-lg-3 gap-2">
-                        <span v-for="navlink in navLinksList">
+                        <template v-for="navlink in navLinksList" :key="navlink.url">
                             <li class="nav-item">
                                 <a :class="`nav-link lead fw-semibold ` + isIndexActive(navlink)" aria-current="page"
                                     :href="`/` + navlink.url">{{
                                         navlink.label }}</a>
                             </li>
-                        </span>
+                        </template>
                     </ul>
                     <div class="d-lg-flex col-lg-3 justify-content-lg-end mt-3 mt-lg-0">
                         <ul
@@ -79,7 +79,7 @@ header .navbar {
 
                             <li class="nav-item">
                                 <a class="nav-link" href="/cart"><span class="icon"><i class="bi bi-cart"></i></span>
-                                    <span class="label ms-2">Cartes</span>
+                                    <span class="label ms-2">Panier</span>
                                 </a>
                             </li>
 

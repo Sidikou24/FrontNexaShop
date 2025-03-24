@@ -95,6 +95,18 @@ export default {
           label: "Blog"
         },
         {
+          tag: "Store",
+          isActive: false,
+          url: "store",
+          label: "Store"
+        },
+        {
+          tag: "StoreClient",
+          isActive: false,
+          url: "storeClient",
+          label: "StoreClient"
+        },
+        {
           tag: "contact",
           isActive: false,
           url: "contact",

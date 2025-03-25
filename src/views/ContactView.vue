@@ -79,7 +79,7 @@ import GlobalFooter from "@/components/footerComponents/GlobalFooter.vue";
             <div class="container py-4">
                 <div class="row py-lg-5">
                     <div class="col-lg-6 col-md-8 mx-auto">
-                        <h1 class="fw-bold display-3 text-white">Contact us.</h1>
+                        <h1 class="fw-bold display-3 text-white">Contactez nous.</h1>
                     </div>
                 </div>
             </div>
@@ -94,7 +94,7 @@ import GlobalFooter from "@/components/footerComponents/GlobalFooter.vue";
                         <div class="feature bg-success bg-gradient text-white rounded-3 mb-3"><i class="bi bi-envelope"></i>
                         </div>
                         <h1 class="fw-bolder">Get in touch</h1>
-                        <p class="lead fw-normal text-muted mb-0">We'd love to hear from you</p>
+                        <p class="lead fw-normal text-muted mb-0">Au plaisir de vous lire</p>
                     </div>
                     <div class="row gx-5 justify-content-center">
                         <div class="col-lg-8 col-xl-6">

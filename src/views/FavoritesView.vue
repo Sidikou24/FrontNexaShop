@@ -21,7 +21,7 @@ import LinkButton from "@/components/btnComponents/GlobalButtons/LinkButton.vue"
         <div class="container py-4">
             <div class="row py-lg-4">
                 <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-bold display-5 opacity-80">Favourite products</h1>
+                    <h1 class="fw-bold display-5 opacity-80">Vos produits favoris</h1>
                 </div>
             </div>
         </div>
@@ -34,15 +34,15 @@ import LinkButton from "@/components/btnComponents/GlobalButtons/LinkButton.vue"
         <!-- Title::: -->
         <div class="row mt-3 text-center py-1 border-bottom border-black">
             <div class="col-sm-2 fw-semibold p-3 themed-grid-col">Image</div>
-            <div class="col-sm-2 fw-semibold p-3 themed-grid-col">Product</div>
-            <div class="col-sm-2 fw-semibold p-3 themed-grid-col">Price</div>
-            <div class="col-sm-2 fw-semibold p-3 themed-grid-col">Quantity</div>
+            <div class="col-sm-2 fw-semibold p-3 themed-grid-col">Produit</div>
+            <div class="col-sm-2 fw-semibold p-3 themed-grid-col">Prix</div>
+            <div class="col-sm-2 fw-semibold p-3 themed-grid-col">Quantité</div>
             <div class="col-sm-2 fw-semibold p-3 themed-grid-col">Total</div>
             <div class="col-sm-2 fw-semibold p-3 themed-grid-col">Options</div>
         </div>
         <!-- ...Title::: -->
 
-        <div v-for="item in 2">
+        <div v-for="(item, index) in 2" :key="index">
             <!-- Product-Item -->
             <div class="product-item row text-center border-bottom d-flex align-items-stretch justify-content-between">
                 <div class="col-sm-2 fw-semibold p-3 themed-grid-col d-flex justify-content-center align-items-center">
@@ -89,11 +89,11 @@ import LinkButton from "@/components/btnComponents/GlobalButtons/LinkButton.vue"
                         <button
                             class="rounded rounded-0 py-2 fw-semibold my-3
                         btn btn-light border border-1 bg-body-tertiary d-flex justify-content-center gap-2 align-items-center w-100"
-                            type="button">
-                            <span class="me-2">Delete All Favorites</span>
+                            type="button" style="color:red;">
+                            <span class="me-2">Supprimer tous vos favoris</span>
                             <span class="bi bi-trash3"></span>
                         </button>
-                        <LinkButton btn-theme="dark-btn" btn-label="Continue Shopping" btn-url="" btn-icon="cart-check"
+                        <LinkButton btn-theme="dark-btn" btn-label="Continuez les achats" btn-url="" btn-icon="cart-check"
                             outlined="false" class="py-2 btn-lg my-3 w-100" />
                     </div>
 

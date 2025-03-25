@@ -31,15 +31,11 @@
           <!-- navbar start hua ha -->
           <ul class="navbar-nav justify-content-end align-items-sm-start align-items-lg-center flex-grow-1 pe-3">
             <!-- script me eske bare me likha hua ha home , shop , about us , contact us  -->
-            <span v-for="navlink in navLinksList" >
-              <!-- 
-                 ...
-              -->
-              <li class="nav-item">
-                <a :class="`nav-link fs-6` + isIndexActive(navlink)" aria-current="page" :href="`/` + navlink.url">{{
+            <li v-for="navlink in navLinksList" :key="navlink.url" class="nav-item">
+                <a :class="`nav-link fs-6` + isIndexActive(navlink)" aria-current="page" :href="`/` + navlink.url">{{ 
                   navlink.label }}</a>
-              </li>
-            </span>
+
+            </li>
             <li class="nav-item ms-lg-5">
               <a class="nav-link fs-5 visually-hidden" href="cart"><span class="icon"><i
                     class="bi bi-cart"></i></span></a>
@@ -97,6 +93,18 @@ export default {
           isActive: false,
           url: "blog",
           label: "Blog"
+        },
+        {
+          tag: "Store",
+          isActive: false,
+          url: "store",
+          label: "Store"
+        },
+        {
+          tag: "StoreClient",
+          isActive: false,
+          url: "storeClient",
+          label: "StoreClient"
         },
         {
           tag: "contact",

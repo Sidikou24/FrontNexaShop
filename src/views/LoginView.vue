@@ -70,9 +70,10 @@ button:active {
                         Se rappeler de moi
                     </label>
                 </div>
-                <button
-                    class="btn btn-light primary-btn w-100 py-2 text-white d-flex align-items-center justify-content-center rounded-0"
-                    type="submit">Accéder à ma boutique</button>
+                <router-link to="/create-store"
+                   class="btn btn-light primary-btn w-100 py-2 text-white d-flex align-items-center justify-content-center rounded-0 text-decoration-none">
+                     Connexion
+                  </router-link>
             </form>
 
             <p class="mt-3 text-body-tertiary fw-medium">Vous avez oublié mot de passe

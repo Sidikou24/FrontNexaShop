@@ -13,6 +13,8 @@ import SignupView from "@/views/SignupView.vue";
 import LoginView from "@/views/LoginView.vue";
 import RecoverAccountView from "@/views/RecoverAccountView.vue";
 import ProfileSettingsView from "@/views/ProfileSettings.vue";
+import CreateStoreView from "../views/CreateStoreView.vue";
+import StoreView from "../views/StoreView.vue";
 
 /* Create router... */
 const router = createRouter({
@@ -94,7 +96,18 @@ const router = createRouter({
       name: "recover",
       component: RecoverAccountView,
     },
+    {
+      path: "/create-store",
+      name: "create-store",
+      component: CreateStoreView,
+    },
+    {
+      path: "/store",
+      name: "store",
+      component: StoreView,
+    }
   ],
+  
 });
 
 /* export_router_function */

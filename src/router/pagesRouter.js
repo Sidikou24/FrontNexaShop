@@ -14,6 +14,9 @@ import LoginView from "@/views/LoginView.vue";
 import RecoverAccountView from "@/views/RecoverAccountView.vue";
 import ProfileSettingsView from "@/views/ProfileSettings.vue";
 import CreateStoreView from "@/views/CreateStoreView.vue";
+import admin from "@/views/admin.vue";
+
+
 
 /* Create router... */
 const router = createRouter({
@@ -34,7 +37,9 @@ const router = createRouter({
     { path: "/login", name: "login", component: LoginView },
     { path: "/settings", name: "settings", component: ProfileSettingsView },
     { path: "/recover", name: "recover", component: RecoverAccountView },
-    { path: "/create-store", name: "create-store", component: CreateStoreView }
+    { path: "/create-store", name: "create-store", component: CreateStoreView },
+    { path: "/admin", name: "admin", component: admin },
+   
   ],
 });
 

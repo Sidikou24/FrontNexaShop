@@ -14,7 +14,7 @@ import LoginView from "@/views/LoginView.vue";
 import RecoverAccountView from "@/views/RecoverAccountView.vue";
 import ProfileSettingsView from "@/views/ProfileSettings.vue";
 import CreateStoreView from "../views/CreateStoreView.vue";
-import StoreView from "../views/StoreView.vue";
+
 
 /* Create router... */
 const router = createRouter({

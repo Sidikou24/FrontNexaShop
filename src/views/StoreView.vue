@@ -392,6 +392,6 @@ export default {
 </script>
 
 <style>
-@import "./src/assets/css/dashbord-style.css"
-</style>
+@import "../assets/css/dashbord-style.css"
 
+</style>

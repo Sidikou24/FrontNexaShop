@@ -79,6 +79,6 @@
   </script>
   
   <style>
- @import "./src/assets/css/shop-style.css"
+@import "../assets/css/shop-style.css"
+
   </style>
-  

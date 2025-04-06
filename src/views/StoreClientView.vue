@@ -65,7 +65,7 @@ export default {
           name: 'Casque sans fil',
           category: 'Electronics',
           price: '15.000',
-          image: '/assets/images/product-1.png',
+          image: '/assets/images/OIP.jpeg',
           isFavorite: false
         },
         {
@@ -73,7 +73,7 @@ export default {
           name: 'Montre intelligente',
           category: 'Electronics',
           price: '25.000',
-          image: '/assets/images/product-2.png',
+          image: '/assets/images/montre.jpeg',
           isFavorite: false
         },
         {
@@ -81,7 +81,7 @@ export default {
           name: 'Chaussures sport',
           category: 'Sports',
           price: '10.000',
-          image: '/assets/images/product-3.png',
+          image: '/assets/images/shoes.jpeg',
           isFavorite: false
         },
         {
@@ -89,7 +89,7 @@ export default {
           name: 'Cotton T-Shirt',
           category: 'Vêtement',
           price: '5.000',
-          image: '/assets/images/product-4.png',
+          image: '/assets/images/Tshirt.jpeg',
           isFavorite: false
         },
         {
@@ -97,7 +97,7 @@ export default {
           name: 'Mixer',
           category: 'Maison',
           price: '12.000',
-          image: '/assets/images/product-5.png',
+          image: '/assets/images/Mixer.jpeg',
           isFavorite: false
         },
         {
@@ -105,7 +105,7 @@ export default {
           name: 'Parfum',
           category: 'Beauté',
           price: '12.000',
-          image: '/assets/images/product-6.png',
+          image: '/assets/images/parfum.jpeg',
           isFavorite: false
         }
       ],

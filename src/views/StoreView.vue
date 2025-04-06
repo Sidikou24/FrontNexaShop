@@ -332,8 +332,10 @@ export default {
   }
 };
 </script>
-
-<style>
-@import "../assets/css/dashbord-style.css"
-
+<style scoped>
+@import "../assets/css/dashbord-style.css";
 </style>
+
+<!-- Add in your head tag -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></link>

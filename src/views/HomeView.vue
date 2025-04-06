@@ -102,7 +102,26 @@
 
           <!-- Banner-Image -->
           <div class="banner-image col-11 col-lg-6 px-lg-0 preload-l">
-            <img src="/assets/images/couch.png" class="main-banner-img mx-auto" alt="">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+              <!-- Fond adapté à la couleur #265a5a -->
+              <rect width="800" height="450" fill="#265a5a"/>
+              
+              <!-- Logo Nexa Shop -->
+              <g transform="translate(400, 225)">
+                <!-- Cercle décoratif -->
+                <circle cx="0" cy="0" r="100" fill="none" stroke="#ffffff" stroke-width="3"/>
+                
+                <!-- Éléments décoratifs du logo -->
+                <path d="M-50,-20 L50,-20 M-50,20 L50,20" stroke="#ffffff" stroke-width="4" fill="none"/>
+                <path d="M-20,-50 L-20,50 M20,-50 L20,50" stroke="#ffffff" stroke-width="4" fill="none"/>
+                
+                <!-- Texte NEXA -->
+                <text x="0" y="-15" font-family="Arial, sans-serif" font-weight="bold" font-size="48" fill="#ffffff" text-anchor="middle">NEXA</text>
+                
+                <!-- Texte SHOP -->
+                <text x="0" y="35" font-family="Arial, sans-serif" font-size="32" fill="#ffffff" text-anchor="middle">SHOP</text>
+              </g>
+            </svg>
           </div>
         </div>
       </div>

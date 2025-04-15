@@ -1,11 +1,9 @@
 <template>
   <div class="dashboard-container">
     <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <h1>Bienvenue dans votre boutique<br><span>Nom de la boutique</span></h1>
-      </div>
-      <nav class="sidebar-nav">
+    <aside class="sidebar">
+      <h1 class="logo">NexaShop</h1>
+      <nav>
         <ul>
           <li @click="activeTab = 'aperçu'" :class="{active: activeTab === 'aperçu'}">
             <i class="fas fa-tachometer-alt"></i> Dashboard
@@ -16,12 +14,14 @@
           <li @click="activeTab = 'commandes'" :class="{active: activeTab === 'commandes'}">
             <i class="fas fa-shopping-cart"></i> Commandes
           </li>
-          <li @click="activeTab = 'parametres'" :class="{active: activeTab === 'parametres'}">
-            <i class="fas fa-cog"></i> Paramètres
-          </li>
+          <router-link to="/settings" custom v-slot="{ navigate }">
+            <li @click="navigate" @keypress.enter="navigate" role="link">
+              <i class="fas fa-cog"></i> Paramètres
+            </li>
+          </router-link>
         </ul>
       </nav>
-    </div>
+    </aside>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -39,128 +39,33 @@
       </header>
 
       <main>
-        <!-- Dashboard Overview -->
-        <div v-if="activeTab === 'aperçu'" class="dashboard-overview">
-          <!-- Stats Cards -->
-          <div class="stats-grid">
-            <div class="stat-card sales">
-              <div class="stat-icon">
-                <i class="fas fa-chart-line"></i>
-              </div>
-              <div class="stat-info">
-                <h3>Ventes totales</h3>
-                <p class="stat-value">{{ statsAperçu.ventesTotales }}</p>
-                <p class="stat-change positive">↑ +15% vs mois dernier</p>
-              </div>
-            </div>
-
-            <div class="stat-card orders">
-              <div class="stat-icon">
-                <i class="fas fa-shopping-bag"></i>
-              </div>
-              <div class="stat-info">
-                <h3>Commandes</h3>
-                <p class="stat-value">{{ statsAperçu.commandesAujourdhui }}</p>
-                <p class="stat-change positive">↑ +3 vs hier</p>
-              </div>
-            </div>
-
-            <div class="stat-card products">
-              <div class="stat-icon">
-                <i class="fas fa-cubes"></i>
-              </div>
-              <div class="stat-info">
-                <h3>Produits actifs</h3>
-                <p class="stat-value">{{ statsAperçu.produitsActifs }}</p>
-                <p class="stat-change neutral">2 en rupture</p>
-              </div>
-            </div>
-
-            <div class="stat-card visitors">
-              <div class="stat-icon">
-                <i class="fas fa-users"></i>
-              </div>
-              <div class="stat-info">
-                <h3>Visiteurs</h3>
-                <p class="stat-value">{{ statsAperçu.visiteurs }}</p>
-                <p class="stat-change negative">↓ -8% vs semaine dernière</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Charts Section -->
-          <div class="charts-section">
-            <div class="charts-header">
-              <h3>Analyse des ventes</h3>
-              <select v-model="selectedTimeRange" @change="updateChartsData">
-                <option value="30">30 derniers jours</option>
-                <option value="7">7 derniers jours</option>
-                <option value="year">Cette année</option>
-              </select>
-            </div>
-            
-            <div class="charts-grid">
-              <div class="chart-container">
-                <h4>Évolution des ventes</h4>
-                <apexchart width="100%" height="350" type="bar" :options="barChartOptions" :series="barSeries"></apexchart>
-              </div>
-              
-              <div class="chart-container">
-                <h4>Répartition par catégorie</h4>
-                <apexchart width="100%" height="350" type="pie" :options="pieChartOptions" :series="pieSeries"></apexchart>
-              </div>
-            </div>
-          </div>
-
-          <!-- Recent Orders -->
-          <div class="recent-orders">
-            <div class="orders-header">
-              <h3>Commandes récentes</h3>
-              <button>Voir tout</button>
-            </div>
-            <div class="orders-list">
-              <div class="order-item" v-for="(order, index) in recentOrders" :key="index">
-                <div class="order-id">#{{ order.id }}</div>
-                <div class="order-date">{{ order.date }}</div>
-                <div class="order-amount">{{ order.amount }} fcfa</div>
-                <div class="order-status" :class="order.status">{{ order.statusText }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <DashboardComponent 
+          v-if="activeTab === 'aperçu'"
+          :statsAperçu="statsAperçu"
+          :recentOrders="recentOrders"
+          :selectedTimeRange="selectedTimeRange"
+          :barSeries="barSeries"
+          :barChartOptions="barChartOptions"
+          :pieSeries="pieSeries"
+          :pieChartOptions="pieChartOptions"
+          @updateChartsData="updateChartsData"
+        />
+                
         <!-- Products Management -->
-        <div v-if="activeTab === 'produits'" class="produits-section">
-          <h2>Gestion des produits</h2>
-          <div class="actions">
-            <button @click="showAddProductModal">Ajouter un produit</button>
-          </div>
-          <div class="product-list">
-            <div class="product-item" v-for="product in products" :key="product.id">
-              <div class="product-info">
-                <h3>{{ product.name }}</h3>
-                <p>Prix: {{ product.price }} fcfa</p>
-                <p>Stock: {{ product.stock }}</p>
-              </div>
-              <div class="product-actions">
-                <button @click="editProduct(product)">Modifier</button>
-                <button @click="deleteProduct(product.id)">Supprimer</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Modal pour ajouter un produit -->
-          <div v-if="isModalVisible" class="modal">
-      <div class="modal-content">
-        <h3>{{ isEditing ? 'Modifier le produit' : 'Ajouter un produit' }}</h3>
-        <input v-model="productForm.name" placeholder="Nom du produit" />
-        <input v-model="productForm.price" placeholder="Prix" type="number" />
-        <input v-model="productForm.stock" placeholder="Quantité en stock" type="number" />
-        <button @click="saveProduct">{{ isEditing ? 'Modifier' : 'Ajouter' }}</button>
-        <button @click="closeModal">Annuler</button>
-      </div>
-</div>
-        </div>
+        <ProduitComponent 
+          v-if="activeTab === 'produits'"
+          :products="products"
+          :isModalVisible="isModalVisible"
+          :isEditing="isEditing"
+          :productForm="productForm"
+          :imagePreview="imagePreview"
+          @showAddProductModal="showAddProductModal"
+          @editProduct="editProduct"
+          @deleteProduct="deleteProduct"
+          @saveProduct="saveProduct"
+          @closeModal="closeModal"
+          @imageUpload="(preview) => imagePreview = preview"
+        />
       </main>
     </div>
   </div>
@@ -168,11 +73,15 @@
 
 <script>
 import VueApexCharts from "vue3-apexcharts";
+import ProduitComponent from '@/components/CommerçantComponents/ProduitComponent.vue';
+import DashboardComponent from '@/components/CommerçantComponents/DashboardComponent.vue';
 
 export default {
   name: "ProfessionalDashboard",
-  components: {
-    apexchart: VueApexCharts
+    components: {
+    apexchart: VueApexCharts,
+    ProduitComponent,
+    DashboardComponent
   },
   data() {
     return {
@@ -200,7 +109,9 @@ export default {
         name: "",
         price: 0,
         stock: 0,
+        image: null
       },
+      imagePreview: null,
       barSeries: [{
         name: "Ventes",
         data: []
@@ -266,6 +177,7 @@ export default {
       }
     };
   },
+
   methods: {
     getHeaderTitle() {
       const titles = {
@@ -302,7 +214,7 @@ export default {
     },
     showAddProductModal() {
       this.isEditing = false;
-      this.productForm = { id: null, name: "", price: 0, stock: 0 };
+      this.productForm = { id: null, name: "", price: 0, stock: 0, image: null };
       this.isModalVisible = true;
     },
     editProduct(product) {
@@ -325,6 +237,17 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+    },
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.imagePreview = e.target.result;
+          this.productForm.image = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
     }
   },
   mounted() {
@@ -332,10 +255,12 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 @import "../assets/css/dashbord-style.css";
+
 </style>
 
 <!-- Add in your head tag -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></link>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">

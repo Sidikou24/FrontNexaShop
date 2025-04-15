@@ -57,6 +57,8 @@ export default {
   data() {
     return {
       searchQuery: '',
+      errorMessage: '',
+      successMessage: '',
       selectedCategory: '',
       categories: ['Electronics', 'Vêtement', 'Maison', 'Beauté', 'Sports'],
       products: [
@@ -119,7 +121,7 @@ export default {
         const matchesCategory = !this.selectedCategory || product.category === this.selectedCategory
         return matchesSearch && matchesCategory
       })
-    }
+    } 
   },
   methods: {
     handleSearch() {

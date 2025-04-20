@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "start": "serve --single --listen 5000 dist"
   },
@@ -18,7 +19,12 @@
     "vue3-apexcharts": "^1.8.0"
   },
   "devDependencies": {
+    "@types/node": "^22.14.1",
     "@vitejs/plugin-vue": "^5.0.4",
-    "vite": "^5.1.6"
+    "@vue/tsconfig": "^0.7.0",
+    "typescript": "^5.8.3",
+    "vite": "^5.1.6",
+    "vite-plugin-checker": "^0.9.1",
+    "vue-tsc": "^2.2.8"
   }
 }

@@ -106,8 +106,10 @@
   <!-- /Product-card-item -->
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import {defineComponent} from "vue";
+
+export default defineComponent({
   name: "ProductItemCard",
   data() {
     return {
@@ -121,5 +123,5 @@ export default {
     productDiscount: { type: String, default: "" },
     productImage: { type: String, default: "@/../src/assets/images/product-3.png" }
   }
-}
+})
 </script>

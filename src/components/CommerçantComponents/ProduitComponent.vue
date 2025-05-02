@@ -121,7 +121,6 @@
       <table class="min-w-full border border-gray-300 shadow-md rounded-lg overflow-hidden">
         <thead class="bg-gray-100 text-gray-700">
           <tr>
-            <th class="px-4 py-3 border">Image</th>
             <th class="px-4 py-3 border">Nom</th>
             <th class="px-4 py-3 border">Description</th>
             <th class="px-4 py-3 border">Prix (FCFA)</th>
@@ -135,9 +134,6 @@
             :key="product.id"
             class="text-center hover-bg-gray-50 transition"
           >
-            <td class="px-4 py-3 border">
-              <img :src="product.imageUrl" class="w-16 h-16 object-cover mx-auto rounded shadow" />
-            </td>
             <td class="px-4 py-3 border">{{ product.name }}</td>
             <td class="px-4 py-3 border text-left">{{ product.description }}</td>
             <td class="px-4 py-3 border">{{ product.price }}</td>
@@ -165,8 +161,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import apiService from '@/services/apiService';
+import type { Product } from '@/models/Product';
 
 export default {
   data() {
@@ -175,7 +172,7 @@ export default {
       errorMessage: '',
       successMessage: '',
       imagePreview: null,
-      products: [],
+      products: [] as Product[],
       newProduct: {
         id: null,
         name: '',
@@ -189,18 +186,29 @@ export default {
       },
     };
   },
-  mounted() {
-    this.fetchProducts();
+  async mounted() {
+    this.products = await apiService.fetchProducts();
   },
   methods: {
-    async fetchProducts() {
-      try {
-        const data = await apiService.fetchProducts();
-        this.products = data;
-      } catch (error) {
-        console.error(error);
-      }
-    },
+    // async fetchProducts () {
+    //   try {
+    //     const raw = await apiService.fetchProducts(); // toujours un tableau
+    //
+    //     /* mapping → vue */
+    //     this.products = raw.map(p => ({
+    //       id:          p.productId,
+    //       name:        p.productName,
+    //       description: p.productDescription,
+    //       price:       p.productPrice,
+    //       stock:       p.productQuantity
+    //     }));
+    //
+    //   } catch (err) {
+    //     console.error('fetchProducts (vue)', err);
+    //     this.errorMessage = 'Impossible de charger les produits : ' + err.message;
+    //     this.products = [];           // évite d’autres erreurs d’affichage
+    //   }
+    // },
     handleImageUpload(event) {
       const file = event.target.files[0];
       if (file) {

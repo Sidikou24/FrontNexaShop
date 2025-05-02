@@ -1,6 +1,7 @@
 import axios from 'axios';
+import {Product} from '@/models/Product';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://localhost:44359';
 
 // Configuration de base d'axios
 const apiClient = axios.create({
@@ -8,13 +9,14 @@ const apiClient = axios.create({
 });
 
 export default {
-  async fetchProducts() {
-    try {
-      const response = await apiClient.get('/api/StoreManagement/Product');
-      return response.data;
-    } catch (error) {
-      throw new Error('Failed to fetch products');
+  async fetchProducts(): Promise<Product[]> {
+    const { data } = await apiClient.get('/api/StoreManagement/Product');
+
+    if (!data?.success) {
+      throw new Error(data.errors?.join(', ') || 'API error');
     }
+    // mapping unique ici
+    return (data.body as ProductDto[]).map(Product.fromApi);
   },
 
   async fetchProductById(id) {

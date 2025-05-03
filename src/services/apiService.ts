@@ -1,60 +1,124 @@
-import type { AxiosInstance, AxiosResponse } from 'axios';
-import axios from 'axios';
-import type { Product } from '@/types/Product'; // à créer si non existant
+// src/services/apiService.ts
+import axios, { type AxiosRequestConfig } from 'axios';
+import { Product, type ProductDto, type ApiResponse } from '@/models/product';
 
-const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5050';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5050';
 
 // Configuration de base d'axios
-const apiClient: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
-const apiService = {
+// Fonction helper pour gérer les erreurs
+const handleApiError = (error: any, defaultMessage: string): never => {
+  console.error('API Error:', error);
+  if (error.response?.data?.errors) {
+    throw new Error(error.response.data.errors.join(', '));
+  }
+  throw new Error(defaultMessage);
+};
+
+export default {
   async fetchProducts(): Promise<Product[]> {
     try {
-      const response: AxiosResponse<Product[]> = await apiClient.get('/api/StoreManagement/Product');
-      return response.data;
+      const response = await apiClient.get<ApiResponse<ProductDto[]>>('/api/StoreManagement/Product');
+      const data = response.data;
+
+      if (!data.success) {
+        throw new Error(data.errors?.join(', ') || 'Échec de récupération des produits');
+      }
+
+      // Transformation des données
+      return data.body.map(Product.fromApi);
     } catch (error) {
-      throw new Error('Failed to fetch products');
+      return handleApiError(error, 'Erreur lors de la récupération des produits');
     }
   },
 
-  async fetchProductById(id: number | string): Promise<Product> {
+  async fetchProductById(id: number): Promise<Product> {
     try {
-      const response: AxiosResponse<Product> = await apiClient.get(`/api/StoreManagement/Product/${id}`);
-      return response.data;
+      const response = await apiClient.get<ApiResponse<ProductDto>>(`/api/StoreManagement/Product/${id}`);
+      const data = response.data;
+
+      if (!data.success) {
+        throw new Error(data.errors?.join(', ') || 'Produit non trouvé');
+      }
+
+      return Product.fromApi(data.body);
     } catch (error) {
-      throw new Error('Failed to fetch product by id');
+      return handleApiError(error, `Erreur lors de la récupération du produit (ID: ${id})`);
     }
   },
 
-  async createProduct(formData: FormData): Promise<Product> {
+  async createProduct(productData: FormData): Promise<Product> {
     try {
-      const response: AxiosResponse<Product> = await apiClient.post('/api/StoreManagement/Product', formData);
-      return response.data;
+      // Pour FormData, nous devons changer le header Content-Type
+      const config: AxiosRequestConfig = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+
+      const response = await apiClient.post<ApiResponse<ProductDto>>(
+        '/api/StoreManagement/Product',
+        productData,
+        config
+      );
+      
+      const data = response.data;
+
+      if (!data.success) {
+        throw new Error(data.errors?.join(', ') || 'Échec de création du produit');
+      }
+
+      return Product.fromApi(data.body);
     } catch (error) {
-      throw new Error('Failed to create product');
+      return handleApiError(error, 'Erreur lors de la création du produit');
     }
   },
 
-  async updateProduct(id: number | string, formData: FormData): Promise<Product> {
+  async updateProduct(id: number, productData: FormData): Promise<Product> {
     try {
-      const response: AxiosResponse<Product> = await apiClient.put(`/api/StoreManagement/Product/${id}`, formData);
-      return response.data;
+      // Pour FormData, nous devons changer le header Content-Type
+      const config: AxiosRequestConfig = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+
+      const response = await apiClient.put<ApiResponse<ProductDto>>(
+        `/api/StoreManagement/Product/${id}`,
+        productData,
+        config
+      );
+      
+      const data = response.data;
+
+      if (!data.success) {
+        throw new Error(data.errors?.join(', ') || 'Échec de mise à jour du produit');
+      }
+
+      return Product.fromApi(data.body);
     } catch (error) {
-      throw new Error('Failed to update product');
+      return handleApiError(error, `Erreur lors de la mise à jour du produit (ID: ${id})`);
     }
   },
 
-  async deleteProduct(id: number | string): Promise<{ success: boolean; message: string }> {
+  async deleteProduct(id: number): Promise<boolean> {
     try {
-      const response: AxiosResponse<{ success: boolean; message: string }> =
-        await apiClient.delete(`/api/StoreManagement/Product/${id}`);
-      return response.data;
+      const response = await apiClient.delete<ApiResponse<boolean>>(`/api/StoreManagement/Product/${id}`);
+      const data = response.data;
+
+      if (!data.success) {
+        throw new Error(data.errors?.join(', ') || 'Échec de suppression du produit');
+      }
+
+      return data.body;
     } catch (error) {
-      throw new Error('Failed to delete product');
+      return handleApiError(error, `Erreur lors de la suppression du produit (ID: ${id})`);
     }
   }
 };
-
-export default apiService;

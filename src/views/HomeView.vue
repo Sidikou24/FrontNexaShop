@@ -206,18 +206,22 @@
 
               <!-- Carousel-Inner -->
               <div class="carousel-inner w-100">
-                <!-- ProductItem-Carousel -->
-                <div class="carousel-item active">
-                  <div class="products-list row row-cols-1 row-cols-lg-3 d-flex justify-content align-items-stretch">
-                    <ProductItemCard
-                      v-for="(product, index) in products"
-                      :key="product.productId || index"
-                      :product-title="product.productName || ''"
-                      :product-price="product.productPrice || ''"
-                      class="col-11 col-lg-4 d-block"
-                    />
-                  </div>
+              <!-- ProductItem-Carousel -->
+              <div
+                v-for="(group, groupIndex) in productGroups"
+                :key="groupIndex"
+                :class="['carousel-item', { active: groupIndex === 0 }]"
+              >
+                <div class="products-list row row-cols-1 row-cols-lg-3 d-flex justify-content align-items-stretch">
+                  <ProductItemCard
+                    v-for="(product, index) in group"
+                    :key="product.id || index"
+                    :product-title="product.name || ''"
+                    :product-price="product.price || ''"
+                    class="col-11 col-lg-4 d-block"
+                  />
                 </div>
+              </div>
               </div>
               <!-- ../Carousel-Inner -->
 
@@ -354,6 +358,16 @@ export default {
   data() {
     return {
       products: []
+    }
+  },
+  computed: {
+    productGroups() {
+      const groups = [];
+      const groupSize = 3;
+      for (let i = 0; i < this.products.length; i += groupSize) {
+        groups.push(this.products.slice(i, i + groupSize));
+      }
+      return groups;
     }
   },
   methods: {

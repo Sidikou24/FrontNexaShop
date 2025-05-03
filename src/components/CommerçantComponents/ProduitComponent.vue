@@ -14,6 +14,10 @@
         
         <form @submit.prevent="handleSubmit" class="space-y-4">       
           <div>
+            <!-- Champs cachés pour IdProduit et StoreId -->
+            <input type="hidden" v-model="newProduct.id" />
+            <input type="hidden" :value="2" />
+            
             <label class="block text-sm font-medium text-gray-700 mb-1">Nom du produit</label>
             <input
               v-model="newProduct.name"
@@ -165,109 +169,131 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue';
 import apiService from '@/services/apiService';
+import type { Product } from '@/types/Product';
 
-export default {
-  data() {
-    return {
-      showModal: false,
-      errorMessage: '',
-      successMessage: '',
-      imagePreview: null,
-      products: [],
-      newProduct: {
-        id: null,
-        name: '',
-        category: '', 
-        description: '',
-        price: 0,
-        stock: 0,
-        imageFile: null,
-        warranty: '',
-        color: '',
-      },
-    };
-  },
-  mounted() {
-    this.fetchProducts();
-  },
-  methods: {
-    async fetchProducts() {
+export default defineComponent({
+  setup() {
+    const showModal = ref(false);
+    const imagePreview = ref<string | null>(null);
+    const products = ref<Product[]>([]);
+    
+    const newProduct = ref<Partial<Product> & { imageFile?: File | null }>({
+      id: 1, // valeur par défaut pour IdProduit (pour test)
+      storeId: 2, // valeur par défaut pour StoreId (pour test)
+      name: '',
+      category: '',
+      description: '',
+      price: 0,
+      stock: 0,
+      warranty: '',
+      color: '',
+      imageFile: null,
+    });
+
+    const fetchProducts = async () => {
       try {
-        const data = await apiService.fetchProducts();
-        this.products = data;
+        products.value = await apiService.fetchProducts();
       } catch (error) {
         console.error(error);
       }
-    },
-    handleImageUpload(event) {
-      const file = event.target.files[0];
+    };
+
+    const handleImageUpload = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
       if (file) {
-        this.newProduct.imageFile = file;
-        this.imagePreview = URL.createObjectURL(file);
+        newProduct.value.imageFile = file;
+        imagePreview.value = URL.createObjectURL(file);
       }
-    },
-    async handleSubmit() {
-      if (!this.newProduct.name || !this.newProduct.description || !this.newProduct.category || this.newProduct.price < 0 || this.newProduct.stock < 0) {
+    };
+
+    const handleSubmit = async () => {
+      const { name, description, category, price, stock } = newProduct.value;
+      if (!name || !description || !category || price! < 0 || stock! < 0) {
         alert('Veuillez remplir tous les champs requis correctement.');
         return;
       }
 
       const formData = new FormData();
-      formData.append('name', this.newProduct.name);
-      formData.append('category', this.newProduct.category); // Ajout de la catégorie
-      formData.append('description', this.newProduct.description);
-      formData.append('price', this.newProduct.price);
-      formData.append('stock', this.newProduct.stock);
-      if (this.newProduct.imageFile) {
-        formData.append('image', this.newProduct.imageFile);
+      formData.append('storeId', newProduct.value.storeId?.toString() || '2');
+      formData.append('id', newProduct.value.id?.toString() || '25');
+      formData.append('name', name);
+      formData.append('category', category);
+      formData.append('description', description);
+      formData.append('price', price!.toString());
+      formData.append('stock', stock!.toString());
+      if (newProduct.value.imageFile) {
+        formData.append('image', newProduct.value.imageFile);
       }
-      formData.append('warranty', this.newProduct.warranty || '');
-      formData.append('color', this.newProduct.color || '');
+      formData.append('warranty', newProduct.value.warranty || '');
+      formData.append('color', newProduct.value.color || '');
+
       try {
-        if (this.newProduct.id) {
-          await apiService.updateProduct(this.newProduct.id, formData);
+        if (newProduct.value.id) {
+          await apiService.updateProduct(newProduct.value.id, formData);
         } else {
           await apiService.createProduct(formData);
         }
-        this.showModal = false;
-        this.resetForm();
-        this.fetchProducts();
+        showModal.value = false;
+        resetForm();
+        fetchProducts();
       } catch (error) {
         console.error(error);
         alert("Erreur lors de l'enregistrement du produit");
       }
-    },
-    resetForm() {
-      this.newProduct = {
-        id: null,
+    };
+
+    const resetForm = () => {
+      newProduct.value = {
+        id: 2,
         name: '',
-        category: '', // Réinitialisation de la catégorie
+        category: '',
         description: '',
         price: 0,
         stock: 0,
+        warranty: '',
+        color: '',
         imageFile: null,
       };
-      this.imagePreview = null;
-    },
-    editProduct(product) {
-      this.newProduct = { ...product, imageFile: null };
-      this.imagePreview = product.imageUrl;
-      this.showModal = true;
-    },
-    async deleteProduct(id) {
+      imagePreview.value = null;
+    };
+
+    const editProduct = (product: Product) => {
+      newProduct.value = { ...product, imageFile: null };
+      imagePreview.value = product.imageUrl ?? null;
+      showModal.value = true;
+    };
+
+    const deleteProduct = async (id: number) => {
       if (!confirm('Supprimer ce produit ?')) return;
       try {
         await apiService.deleteProduct(id);
-        this.fetchProducts();
+        fetchProducts();
       } catch (error) {
         console.error(error);
         alert("Erreur lors de la suppression");
       }
-    },
-  },
-};
+    };
+
+    onMounted(fetchProducts);
+
+    return {
+      showModal,
+      imagePreview,
+      products,
+      newProduct,
+      fetchProducts,
+      handleImageUpload,
+      handleSubmit,
+      resetForm,
+      editProduct,
+      deleteProduct
+    };
+  }
+});
 </script>
 
 <style scoped>

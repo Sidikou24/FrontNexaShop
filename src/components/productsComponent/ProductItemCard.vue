@@ -79,7 +79,7 @@
       <span class="addtocard d-flex  flex-column justify-content-center align-items-center">
         <button type="button" class="btn btn-success d-flex justify-content-center align-items-center"><span
             class="bi bi-plus-lg mx-auto d-block"></span></button>
-        <span class="text-white mt-3 d-block">Add to cart</span>
+        <span class="text-white mt-3 d-block">Ajouter au panier</span>
       </span>
       <div class="cover"></div>
       <img :src="productImage" alt="" />
@@ -116,12 +116,12 @@ export default defineComponent({
     }
   },
   props: {
-    productId: { type: String },
+    productId: { type: Number },
     productTitle: { type: String, default: "Product Title" },
-    productCategory: { type: String, default: "Category" },
+    productCategory: { type: Number, default: "Category" },
     productPrice: { type: String, default: "100" },
     productDiscount: { type: String, default: "" },
-    productImage: { type: String, default: "@/../src/assets/images/product-3.png" }
+    productImage: { type: String, default: "@/../src/assets/images/montre.png" }
   }
 })
 </script>

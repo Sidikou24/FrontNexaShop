@@ -1,22 +1,22 @@
 <template>
   <div class="dashboard-container">
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" :class="{ collapsed: !isSidebarOpen }">
       <h1 class="logo">NexaShop</h1>
       <nav>
         <ul>
           <li @click="activeTab = 'aperçu'" :class="{active: activeTab === 'aperçu'}">
-            <i class="fas fa-tachometer-alt"></i> Dashboard
+            <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
           </li>
           <li @click="activeTab = 'produits'" :class="{active: activeTab === 'produits'}">
-            <i class="fas fa-box"></i> Produits
+            <i class="fas fa-box"></i> <span>Produits</span>
           </li>
           <li @click="activeTab = 'commandes'" :class="{active: activeTab === 'commandes'}">
-            <i class="fas fa-shopping-cart"></i> Commandes
+            <i class="fas fa-shopping-cart"></i> <span>Commandes</span>
           </li>
           <router-link to="/settings" custom v-slot="{ navigate }">
             <li @click="navigate" @keypress.enter="navigate" role="link">
-              <i class="fas fa-cog"></i> Paramètres
+              <i class="fas fa-cog"></i> <span>Paramètre</span>
             </li>
           </router-link>
         </ul>
@@ -25,19 +25,23 @@
 
     <!-- Main Content -->
     <div class="main-content">
-      <header class="main-header">
-        <h2>{{ getHeaderTitle() }}</h2>
-        <div class="header-actions">
-          <div class="search-box">
+      <header class="main-header" >
+        <button class="toggle-btn" @click="isSidebarOpen = !isSidebarOpen">
+          <i class="fas" :class="isSidebarOpen ? 'fa-bars' : 'fa-times'"></i>
+        </button>
+        <h2 style="color:white;">{{ getHeaderTitle() }}</h2>
+          <div class="header-actions">
+            <div class="search-box">
             <i class="fas fa-search"></i>
             <input type="text" placeholder="Rechercher...">
           </div>
           <div class="user-profile">
-            <img src="https://via.placeholder.com/40" alt="Profile">
+            <img src="/assets/images/person_3.jpg" alt="Profile">
           </div>
         </div>
       </header>
-
+      
+      
       <main>
         <DashboardComponent 
           v-if="activeTab === 'aperçu'"
@@ -85,6 +89,7 @@ export default {
   },
   data() {
     return {
+      isSidebarOpen: true,
       activeTab: "aperçu",
       selectedTimeRange: "30",
       statsAperçu: {

@@ -209,39 +209,15 @@
                 <!-- ProductItem-Carousel -->
                 <div class="carousel-item active">
                   <div class="products-list row row-cols-1 row-cols-lg-3 d-flex justify-content align-items-stretch">
-                    <ProductItemCard product-title="Ergonomic Chair" product-category="Trendy timber" product-price="1400"
-                      product-discount="2000" product-image="/assets/images/product-3.png" class="col-11 col-lg-4 d-block" />
-                    <ProductItemCard product-title="Nordic Chair" product-category="Trendy timber" product-price="1900"
-                      product-discount="3500" product-image="/assets/images/product-1.png" class="col-11 col-lg-4 d-block" />
-                    <ProductItemCard product-title="Kruzo Aero Chair" product-category="Trendy timber" product-price="1000"
-                      product-discount="1300" product-image="/assets/images/product-2.png" class="col-11 col-lg-4 d-block" />
+                    <ProductItemCard
+                      v-for="(product, index) in products"
+                      :key="product.productId || index"
+                      :product-title="product.productName || ''"
+                      :product-price="product.productPrice || ''"
+                      class="col-11 col-lg-4 d-block"
+                    />
                   </div>
                 </div>
-
-                <div class="carousel-item ">
-                  <div class="products-list row row-cols-1 row-cols-lg-3 d-flex justify-content align-items-stretch">
-                    <ProductItemCard product-title="Ergonomic Chair" product-category="Trendy timber" product-price="1300"
-                      product-discount="" product-image="/assets/images/product-3.png" class="col-11 col-lg-4 d-block" />
-                    <ProductItemCard product-title="Nordic Chair" product-category="Trendy timber" product-price="1700"
-                      product-discount="" product-image="/assets/images/product-1.png" class="col-11 col-lg-4 d-block" />
-                    <ProductItemCard product-title="Kruzo Aero Chair" product-category="Trendy timber" product-price="900"
-                      product-discount="" product-image="/assets/images/product-2.png" class="col-11 col-lg-4 d-block" />
-                  </div>
-                </div>
-                <div class="carousel-item">
-                  <div class="products-list row row-cols-1 row-cols-lg-3 d-flex justify-content align-items-stretch">
-                    <ProductItemCard product-title="Ergonomic Chair" product-category="Trendy timber" product-price="1200"
-                      product-discount="3%" product-image="/assets/images/product-3.png" class="col-11 col-lg-4 d-block" />
-                    <ProductItemCard product-title="Nordic Chair" product-category="Trendy timber" product-price="1600"
-                      product-discount="5%" product-image="/assets/images/product-1.png" class="col-11 col-lg-4 d-block" />
-                    <ProductItemCard product-title="Kruzo Aero Chair" product-category="Trendy timber" product-price="800"
-                      product-discount="1%" product-image="/assets/images/product-2.png" class="col-11 col-lg-4 d-block" />
-                  </div>
-                </div>
-                
-
-                
-
               </div>
               <!-- ../Carousel-Inner -->
 
@@ -371,15 +347,18 @@ import BlogArticlesBanner from '@/components/bodyComponents/BlogArticlesBanner.v
 import NewsletterBanner from '@/components/footerComponents/NewsletterBanner.vue';
 import GlobalFooter from '@/components/footerComponents/GlobalFooter.vue';
 
+import apiService from '../services/apiService';
+
 export default {
   name: "HomeView",
   data() {
     return {
+      products: []
     }
   },
   methods: {
     setPageTitle() {
-      document.title = "Home | Trendy Timber";
+      document.title = "Home | Nexa Shop";
     }
   },
   components: {
@@ -391,6 +370,13 @@ export default {
     BlogArticlesBanner,
     NewsletterBanner,
     GlobalFooter
+  },
+  async mounted() {
+    try {
+      this.products = await apiService.fetchProducts();
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
   },
   beforeMount() {
     this.setPageTitle()
